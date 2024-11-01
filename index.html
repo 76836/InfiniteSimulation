@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="./manifest.json">
     <title>Nothing playable yet...</title>
     <style>
         /* Previous styles remain the same until dialogue-box */
@@ -34,17 +35,16 @@
             display: none;
         }
 
-        #start-screen.active, #game-interface.active, .pause-menu.active {
+        #game-interface.active, .pause-menu.active {
             display: flex;
         }
 
         /* Start Screen */
         #start-screen {
-            background: var(--dark);
-            flex-direction: column;
+            background: var(--dark);      
             justify-content: center;
             align-items: center;
-            gap: 1em;
+            display:block;
         }
 
         /* Game Interface */
@@ -179,9 +179,215 @@
 </head>
 <body>
     <div id="start-screen" class="active">
-        <h1>Infinite Simulation</h1>
-        <button onclick="startGame()">Start the demo.</button>
-        <button onclick="alert('Nothing is here...');">Settings</button>
+
+        
+
+
+
+
+
+
+        <style>
+            :root {
+                --neon-blue: #0ff;
+                --neon-pink: #ff69b4;
+                --dark-purple: #1a0b2e;
+                --accent-purple: #2b1b38;
+                --glow-strength: 0 0 10px;
+            }
+    
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                user-select: none;
+            }
+    
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                font-family: 'Arial', sans-serif;
+                background: var(--dark-purple);
+                color: white;
+                overflow: hidden;
+            }
+    
+            .main-container {
+                height: 100vh;
+                display: grid;
+                grid-template-rows: auto 1fr auto;
+                background: linear-gradient(135deg, rgba(26, 11, 46, 0.5), rgba(43, 27, 56, 0.5)),
+                            url('./images/scene/park.webp') center/cover;
+                position: relative;
+            }
+    
+            /* Top Section Styling */
+            .top-bar {
+                display: flex;
+                justify-content: space-between;
+                padding: 1rem;
+                background: rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+    
+            .button-group {
+                display: flex;
+                gap: 0.5rem;
+                padding: 0.5rem;
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                position: relative;
+            }
+    
+            .button-group::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+                border-radius: 14px;
+                z-index: -1;
+                opacity: 0.5;
+            }
+    
+            .top-button {
+                width: 40px;
+                height: 40px;
+                background: rgba(26, 11, 46, 0.9);
+                border: none;
+                border-radius: 8px;
+                color: white;
+                cursor: pointer;
+                z-index:6;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
+            }
+    
+            .top-button::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+                transform: rotate(45deg);
+                transition: 0.5s;
+            }
+    
+            .top-button:hover::after {
+                transform: rotate(45deg) translate(50%, 50%);
+            }
+    
+    
+            /* Side Menu Styling */
+            .main-menu {
+                display: flex;
+                flex-direction: column;
+                padding: 0;
+                position: absolute;
+                left: -2px;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 100;
+            }
+    
+            .menu-button {
+                width: 45vw;
+                height: 60px;
+                background: rgba(26, 11, 46, 0.9);
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                border-radius: 0px 12px 12px 0px;
+                color: white;
+                margin-bottom: 1rem;
+                z-index:6;
+                font-size:large;
+                text-align:left;
+                padding-left: 1rem;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
+            }
+    
+            .menu-button::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+                z-index: -1;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+    
+            .menu-button:hover::before {
+                opacity: 1;
+            }
+    
+            .menu-button:hover{
+                color:black;
+                font-weight:bold;
+            }
+    
+    
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.4); }
+                70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
+            }
+    
+            .notification-dot {
+                position: absolute;
+                top: calc(50% - 10px);
+                right: 20px;
+                width: 20px;
+                z-index:997;
+                height: 20px;
+                background: red;
+                border-radius: 50%;
+                animation: pulse 2s infinite;
+            }
+        </style>
+ 
+        <div class="main-container">
+            <div class="top-bar">
+                <div class="button-group">
+                    <button class="top-button" onclick="toggleSideMenu('missions')">settings</button>
+                    <button class="top-button" onclick="toggleSideMenu('daily')">your phone</button>
+                    <button class="top-button" onclick="toggleSideMenu('events')">help</button>
+                    <button class="top-button" onclick="toggleSideMenu('events')">mail</button>
+                </div>
+            </div>
+    
+            <div class="main-menu">
+                <button class="menu-button" onclick="startGame();">Main Story
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="menu-button" onclick="togglePopup('inventory')">Characters</button>
+                <button class="menu-button" onclick="togglePopup('settings')">Travel</button>
+                <button class="menu-button" onclick="togglePopup('mail')">Jobs</button>
+            </div>
+    
+        </div>
+    
+    </div>
+
+
+
+
+
+
+
+
     </div>
 
     <div id="game-interface">
@@ -206,6 +412,18 @@
         <button onclick="returnToTitle()">Main Menu</button>
         <button onclick="quitGame()">Quit</button>
     </div>
+
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 
     <script>
         // Game state management
