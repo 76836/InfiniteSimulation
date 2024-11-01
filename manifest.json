@@ -1,0 +1,15 @@
+{
+  "name": "Infinite Simulation",
+  "short_name": "Infinite Simulation",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "./images/icon.png",
+      "sizes": "500x500",
+      "type": "image/png"
+    }
+  ]
+}
