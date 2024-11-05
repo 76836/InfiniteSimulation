@@ -137,7 +137,7 @@
             border: 1px solid var(--primary);
             color: var(--primary);
             padding: 1em;
-            min-width: 200px;
+            width: 60vw;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -161,7 +161,7 @@
             right: 1em;
             z-index: 100;
             min-width: auto;
-            width: 40px;
+            width: 120px;
             height: 40px;
         }
 
@@ -244,6 +244,12 @@
         }
 
         .cyber-popup {
+            margin: 0;
+            padding: 20px;
+            background: #111;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             background: rgba(20, 20, 30, 0.7);
             border: 2px solid #ff0000;
             border-radius: 5px;
@@ -354,7 +360,7 @@
         }
 
         .cyber-popup.destroy {
-            animation: destroy-popup 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: glitch-text 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes destroy-popup {
@@ -436,6 +442,7 @@
                 border-radius: 12px;
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 position: relative;
+                max-width:90vw;
             }
     
             .button-group::before {
@@ -558,7 +565,7 @@
             <div class="top-bar">
                 <div class="button-group">
                     <button class="top-button" onclick="toggleSideMenu('missions')">settings</button>
-                    <button class="top-button" onclick="toggleSideMenu('daily')">your phone</button>
+                    <button class="top-button" onclick="loadupdate();">update</button>
                     <button class="top-button" onclick="toggleSideMenu('events')">help</button>
                     <button class="top-button" onclick="createCyberPopup('<h2 class=&quot;glitch-text&quot;>Mail service.</h2><p>No new mail..</p>');">mail</button>
                 </div>
@@ -622,6 +629,18 @@
     </script>
 
    <script>
+        function loadupdate(){
+            if (navigator.onLine) {
+    createCyberPopup('<h2 class=&quot;glitch-text&quot;>Sent update message, reload to apply update.<h2>');
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then((registration) => {
+    registration.active.postMessage({ action: 'updateCache' });
+  });
+};
+} else {
+    screateCyberPopup('<h2 class=&quot;glitch-text&quot;>Internet is required to download updates.<h2>');
+};
+        };
         function createCyberPopup(content) {
             // Remove any existing popups
             destroyAllPopups();
@@ -699,18 +718,6 @@
             skipMode: false
         };
 
-        // Demo dialogue for testing
-        const demoDialogue = [
-            { speaker: "System", dialogue: "(Everything in this game is AI generated)" },
-            { speaker: "System", dialogue: "Welcome to the infinite demo loop!" },
-            { speaker: "System", dialogue: "This is a demonstration of the dialogue system." },
-            { speaker: "System", dialogue: "You can click or tap to advance the text..." },
-            { speaker: "System", dialogue: "Or use the Auto feature to watch it play automatically!" },
-            { speaker: "System", dialogue: "In the real game, everything will be AI generated as you play..." },
-            { speaker: "System", dialogue: "The AI will be prompted by the option you choose..." },
-            { speaker: "System", dialogue: "So every playthrough will be different and original." },
-        ];
-
         // Core game functions
         function startGame() {
             document.getElementById('start-screen').classList.remove('active');
@@ -722,25 +729,58 @@
         async function runDemo() {
             while (true) {
                 // Play through demo dialogue
-                for (let dialogue of demoDialogue) {
                     await playScene({
-                        background: '/api/placeholder/1920/1080',
-                        character: '/api/placeholder/800/1200',
-                        speaker: dialogue.speaker,
-                        dialogue: dialogue.dialogue
+                        background: './images/scene/park.webp',
+                        character: './images/icon.png',
+                        speaker: "System",
+                        dialogue: "Memory reset..."
                     });
-                }
                 
-                // Present choices
-                const choice = await playScene({
-                    background: '/api/placeholder/1920/1080',
-                    character: '/api/placeholder/800/1200',
-                    speaker: "System",
-                    dialogue: "What would you like to do?",
-                    choices: ["(This demo seems like it's looping)", "So are my response options going to be AI generated?", "..."]
-                });
+                    await playScene({
+                        background: './images/scene/park.webp',
+                        character: './images/akira/image2.png',
+                        speaker: "...",
+                        dialogue: "Hi! I'm Akira..."
+                    });
+
+                    await playScene({
+                        background: './images/scene/park.webp',
+                        character: './images/akira/image2.png',
+                        speaker: "Akira",
+                        dialogue: "Umm..."
+                    });
+
+                    const choice = await playScene({
+                        background: './images/scene/park.webp',
+                        character: './images/akira/image1.png',
+                        speaker: "Akira",
+                        dialogue: "Why exactly did you come here?",
+                        choices: ["I'm stuck in a game demo loop.", "That's not your business.", "..."]
+                    });
+
+                    if (choice == 2) {
+                        await playScene({
+                        background: './images/scene/park.webp',
+                        character: './images/akira/image2.png',
+                        speaker: "Akira",
+                        dialogue: "???"
+                    });
+                    if (choice == 0) {
+                        await playScene({
+                        background: './images/scene/park.webp',
+                        character: './images/akira/image2.png',
+                        speaker: "Akira",
+                        dialogue: "You're right! I can't access any memories with you, but your name is registered in my history..."
+                    });
+                     if (choice == 1) {
+                        await playScene({
+                        background: './images/scene/park.webp',
+                        character: './images/akira/image2.png',
+                        speaker: "Akira",
+                        dialogue: "Fine have it your way."
+                    });
+                    };
                 
-                // Choice doesn't matter, we'll loop anyway
             }
         }
 
@@ -759,9 +799,9 @@
         // Scene management
         async function playScene(sceneData) {
             return new Promise((resolve) => {
-                const scene = document.querySelector('.scene');
-                const character = document.querySelector('.character');
-                const indicator = document.querySelector('.continue-indicator');
+                var scene = document.querySelector('.scene');
+                var character = document.querySelector('.character');
+                var indicator = document.querySelector('.continue-indicator');
                 
                 // Set scene elements
                 scene.style.backgroundImage = `url(${sceneData.background})`;
@@ -771,7 +811,9 @@
                 // Type dialogue
                 typeDialogue(sceneData.dialogue, () => {
                     if (sceneData.choices) {
-                        showChoices(sceneData.choices, resolve);
+                            setTimeout(() => {
+                            showChoices(sceneData.choices, resolve);
+                            }, 20);
                     } else {
                         // Show continue indicator
                         indicator.classList.add('active');
@@ -782,7 +824,7 @@
                                 indicator.classList.remove('active');
                                 document.removeEventListener('click', continueScene);
                                 resolve();
-                            }
+                            };
                         }
 
                         document.addEventListener('click', continueScene);
@@ -809,7 +851,7 @@
                 if (index < text.length && !gameState.skipMode) {
                     dialogueElement.textContent = text.substring(0, index + 1);
                     index++;
-                    setTimeout(type, 30);
+                    setTimeout(type, 100);
                 } else {
                     // If skipping or finished typing
                     dialogueElement.textContent = text;
