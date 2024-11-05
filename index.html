@@ -175,7 +175,202 @@
             .character { height: 60%; }
             button { min-width: 150px; }
         }
+
+        @keyframes button-shine {
+            to {
+                left: 200%;
+            }
+        }
+
+        .cyber-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s;
+            z-index: 1000;
+        }
+
+        .cyber-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0.3;
+        }
+
+        .cyber-bar {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0000, #ff00ff, #00ffff);
+            animation: flow-left 3s linear infinite;
+            opacity: 0.5;
+        }
+
+        .cyber-bar:nth-child(1) { top: 20%; width: 60%; animation-delay: 0s; }
+        .cyber-bar:nth-child(2) { top: 40%; width: 45%; animation-delay: 0.5s; }
+        .cyber-bar:nth-child(3) { top: 60%; width: 75%; animation-delay: 1s; }
+        .cyber-bar:nth-child(4) { top: 80%; width: 55%; animation-delay: 1.5s; }
+
+        .cyber-bar-vertical {
+            position: absolute;
+            width: 2px;
+            height: 40%;
+            background: linear-gradient(180deg, #ff0000, transparent);
+            animation: flow-down 4s linear infinite;
+        }
+
+        .cyber-bar-vertical:nth-child(5) { left: 20%; animation-delay: 0s; }
+        .cyber-bar-vertical:nth-child(6) { left: 40%; animation-delay: 1s; }
+        .cyber-bar-vertical:nth-child(7) { left: 60%; animation-delay: 2s; }
+        .cyber-bar-vertical:nth-child(8) { left: 80%; animation-delay: 3s; }
+
+        @keyframes flow-left {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
+        }
+
+        @keyframes flow-down {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .cyber-popup {
+            background: rgba(20, 20, 30, 0.7);
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+            padding: 20px;
+            position: relative;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            transform: perspective(1000px) rotateX(90deg);
+            opacity: 0;
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 20px #ff0000,
+                       0 0 40px rgba(255, 0, 0, 0.5),
+                       inset 0 0 20px rgba(255, 0, 0, 0.2);
+            color: #fff;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .cyber-popup::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cyber-popup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                transparent 0%,
+                rgba(255, 0, 0, 0.1) 50%,
+                transparent 100%);
+            animation: glitch-bg 3s linear infinite;
+        }
+
+        @keyframes glitch-bg {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: skewX(5deg); }
+            80% { transform: skewX(-5deg); }
+        }
+
+        .cyber-popup.active {
+            transform: perspective(1000px) rotateX(0deg);
+            opacity: 1;
+        }
+
+        .cyber-popup-overlay.active {
+            opacity: 1;
+        }
+
+        .cyber-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            z-index: 2;
+        }
+
+        .cyber-close::before,
+        .cyber-close::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #ff0000;
+            transform-origin: center;
+            transition: all 0.3s;
+        }
+
+        .cyber-close::before {
+            transform: rotate(45deg);
+        }
+
+        .cyber-close::after {
+            transform: rotate(-45deg);
+        }
+
+        .cyber-close:hover::before,
+        .cyber-close:hover::after {
+            background: #ff00ff;
+            box-shadow: 0 0 10px #ff00ff;
+        }
+
+        .glitch-text {
+            position: relative;
+            animation: glitch-text 3s infinite;
+        }
+
+        @keyframes glitch-text {
+            0%, 100% { transform: none; opacity: 1; }
+            92% { transform: none; opacity: 1; }
+            93% { transform: translate(2px, 2px); opacity: 0.75; }
+            94% { transform: translate(-2px, -2px); opacity: 0.75; }
+            95% { transform: translate(2px, -2px); opacity: 0.75; }
+            96% { transform: translate(-2px, 2px); opacity: 0.75; }
+            97% { transform: none; opacity: 1; }
+        }
+
+        .cyber-popup.destroy {
+            animation: destroy-popup 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes destroy-popup {
+            0% { transform: perspective(1000px) rotateX(0deg) scale(1); opacity: 1; }
+            20% { transform: perspective(1000px) rotateX(10deg) scale(1.1) skewX(20deg); opacity: 0.8; }
+            40% { transform: perspective(1000px) rotateX(-20deg) scale(0.9) skewX(-20deg); opacity: 0.6; }
+            60% { transform: perspective(1000px) rotateX(30deg) scale(1.05) skewX(10deg); opacity: 0.4; }
+            80% { transform: perspective(1000px) rotateX(-40deg) scale(0.95) skewX(-10deg); opacity: 0.2; }
+            100% { transform: perspective(1000px) rotateX(90deg) scale(0); opacity: 0; }
+        }
     </style>
+
+
+
+
+    
 </head>
 <body>
     <div id="start-screen" class="active">
@@ -230,6 +425,7 @@
                 background: rgba(0, 0, 0, 0.3);
                 backdrop-filter: blur(10px);
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                max-width:90vw;
             }
     
             .button-group {
@@ -364,7 +560,7 @@
                     <button class="top-button" onclick="toggleSideMenu('missions')">settings</button>
                     <button class="top-button" onclick="toggleSideMenu('daily')">your phone</button>
                     <button class="top-button" onclick="toggleSideMenu('events')">help</button>
-                    <button class="top-button" onclick="toggleSideMenu('events')">mail</button>
+                    <button class="top-button" onclick="createCyberPopup('<h2 class=&quot;glitch-text&quot;>Mail service.</h2><p>No mail..</p>">mail</button>
                 </div>
             </div>
     
@@ -425,6 +621,73 @@
         }
     </script>
 
+   <script>
+        function createCyberPopup(content) {
+            // Remove any existing popups
+            destroyAllPopups();
+            
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'cyber-popup-overlay';
+            
+            // Create background effects
+            const background = document.createElement('div');
+            background.className = 'cyber-background';
+            for (let i = 0; i < 8; i++) {
+                const bar = document.createElement('div');
+                bar.className = i < 4 ? 'cyber-bar' : 'cyber-bar-vertical';
+                background.appendChild(bar);
+            }
+            overlay.appendChild(background);
+            
+            // Create popup
+            const popup = document.createElement('div');
+            popup.className = 'cyber-popup';
+            
+            // Create close button
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'cyber-close';
+            closeBtn.onclick = () => destroyAllPopups();
+            
+            // Set content
+            popup.innerHTML = content;
+            popup.appendChild(closeBtn);
+            
+            // Add to DOM
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+            
+            // Trigger animations
+            requestAnimationFrame(() => {
+                overlay.classList.add('active');
+                popup.classList.add('active');
+            });
+            
+            // Add escape key listener
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    destroyAllPopups();
+                }
+            });
+        }
+
+        function destroyAllPopups() {
+            const overlays = document.querySelectorAll('.cyber-popup-overlay');
+            overlays.forEach(overlay => {
+                const popup = overlay.querySelector('.cyber-popup');
+                popup.classList.add('destroy');
+                overlay.style.transition = 'opacity 0.8s';
+                overlay.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (overlay.parentNode) {
+                        overlay.parentNode.removeChild(overlay);
+                    }
+                }, 800);
+            });
+        }
+    </script>
+    
     <script>
         // Game state management
         const gameState = {
